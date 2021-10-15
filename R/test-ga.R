@@ -11,10 +11,9 @@ df = read_vrp_bench("data-input/A/A-n69-k9.vrp")
 
 meta_data = df$metadata
 capacity =  df$capacity
+distance =df$distance
 df = df$file
 
-# compute distance
-distance = dist(df[, c(2,3)], upper =T, diag = T ) %>% as.matrix()
 
 best =random_nn(capacity ,demand = df$demand,distance = distance)
 # for (i in 1:10000) {
@@ -35,7 +34,8 @@ rs = ga(type = "permutation", fitness = fitness,
         df$demand,
         distance  = distance, 
         lower = 2, upper = max(df$node), 
-        mutation = gaperm_swMutation, popSize = 20, pmutation = 0.1, maxiter = 30000,
+        mutation = gaperm_swMutation, popSize = 100, pmutation = 0.1, maxiter = 3000,
+        run= 3000,
         suggestions = suggest_pop)
 })
 
@@ -57,7 +57,7 @@ summary(rs)
 plot(rs)
 
 # get result distance
-fitness_val  = round(rs@fitnessValue,2)
+fitness_val = round(rs@fitnessValue, 2)
 
 # pull result out
 rs_path = rs@solution[1,] %>% 
@@ -73,20 +73,21 @@ rs_path = rs_path %>% embed(2) %>%
 my_col = paletteer::paletteer_d("ggsci::category20b_d3")
 
 
-df %>% left_join(rs_path, by = c("node" = "from")) %>% 
+a = df %>% left_join(rs_path, by = c("node" = "from")) %>% 
   left_join(df, suffix = c("_from", "_to"), by= c('to' = 'node')) %>% 
   ggplot(aes(x = x_from, y_from, color = as_factor(group) ))+
   geom_point()+
   geom_curve(aes(xend = x_to, yend =y_to), 
              arrow = arrow(angle = 10, type = "closed"), 
              curvature = 0,
-             alpha = .2)+
-  geom_label(aes(label = node), position = position_nudge(x= 1, y = 1))+
-  labs(title = paste("Result", meta_data[1]),
+             alpha = .7, show.legend = F)+
+  geom_label(aes(label = node), position = position_nudge(x= 1, y = 1),show.legend = F)+
+  labs(title = paste0("Result of data set: ", meta_data[1]),
        subtitle = paste0("Total distance: ",fitness_val, "\n",
-                         meta_data[3])) +
+                         meta_data[3]),
+       color= "Sub-tour") +
   scale_color_manual(values = my_col) +
   theme_void()
-  
 
-route
+a
+

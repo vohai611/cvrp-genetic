@@ -33,8 +33,12 @@ read_vrp_bench = function(path) {
   
   file = bind_cols(file1, file2)
   
+  # compute distance
+  distance = dist(file[, c(2,3)], upper =T, diag = T ) %>% as.matrix()
+  
   list(metadata = metadata,
        capacity = capacity,
+       distance = distance,
        file = file)
   
 }

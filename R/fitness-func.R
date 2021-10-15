@@ -22,8 +22,8 @@ gen_route = function(.order, capacity, demand) {
   path
 }
 
-compute_distance = function(path, distance){
-  dist = embed(path ,2) %>%
+compute_distance = function(x, distance){
+  dist = embed(x ,2) %>%
     distance[.] %>% 
     sum()
   - dist
@@ -32,8 +32,8 @@ compute_distance = function(path, distance){
 Rcpp::sourceCpp("cpp/fitness-func.cpp")
 
 # fitness function (compute distance from the order of point visiting)
-fitness = function(.order, capacity, demand, distance) {
-  gen_routeC(.order, capacity, demand) %>% 
+fitness = function(x, capacity, demand, distance) {
+  gen_routeC(x, capacity, demand) %>% 
     compute_distance(distance)
 }
 

@@ -5,36 +5,6 @@ source(here("R/utils.R"))
 source(here("R/random_nn.R"))
 source(here("R/sa-random-nn-search.R"))
 source(here("R/fitness-func.R"))
-vrp_map = function(file, result) {
-  fitness_val = result$distance
-  rs_path = result$path
-  
-  rs_path = rs_path %>% embed(2) %>% 
-    as_tibble(.name_repair = ~c("from", "to")) %>% 
-    mutate(group = cumsum(to == 1))
-  
-  my_col = paletteer::paletteer_d("ggsci::category20b_d3")
-  
-  
-  file$file %>% left_join(rs_path, by = c("node" = "from")) %>% 
-    left_join(file$file, suffix = c("_from", "_to"), by= c('to' = 'node')) %>% 
-    ggplot(aes(x = x_from, y_from, color = as_factor(group) ))+
-    geom_point()+
-    geom_curve(aes(xend = x_to, yend =y_to), 
-               arrow = arrow(angle = 10, type = "closed"), 
-               curvature = 0,
-               alpha = .7, show.legend = F)+
-    geom_label(aes(label = node), position = position_nudge(x= 1, y = 1),
-               show.legend = F)+
-    labs(title = paste0("Result of data set: ", file$metadata[1]),
-         subtitle = paste0("Total distance: ",fitness_val, "\n",
-                           file$metadata[3]),
-         color= "Sub-tour") +
-    scale_color_manual(values = my_col) +
-    theme_void()
-}
-
-
 
 server <- function(input, output, session) {
   observeEvent(input$algo, {
@@ -83,12 +53,28 @@ server <- function(input, output, session) {
                 maxiter = input$ga_maxiter,
                 suggestions = suggest_pop)
         
+        
         x= list()
-        x$path = rs@suggestions[1,] %>% gen_route(df$capacity, df$file$demand)
+        x$path = rs@suggestions[1,] %>% gen_route(file_data()$capacity, file_data()$file$demand)
         x$distance = -rs@fitnessValue
         
-      } else if (input$algo == "Simulated Annealing") {
-      x= 2
+      } else if (input$algo == "Simulated annealing") {
+        candidate = fbest_random_nn(file_data()$capacity, 
+                                    file_data()$file$demand,
+                                    file_data()$distance,
+                                    rep = 100)
+        
+        
+        a = candidate$path %>% divide_subtour() %>% sa_tour(distance = file_data()$file$distance,
+                                                            niter = input$sa_iter,
+                                                            init_temp = input$sa_init_temp,
+                                                            .fun = input$sa_temp_func,
+                                                            alpha= input$sa_alpha)
+        
+        x = list()
+        x$path = a %>% result_sa_tour()
+        x$distance = a %>% result_sa_tour() %>% 
+          fitness(file_data()$capacity, file_data()$file$demand, file_data()$distance)
       }
       x
       })
@@ -111,7 +97,6 @@ server <- function(input, output, session) {
     })
 
   })
-  
   
 }
 shinyApp(ui, server)

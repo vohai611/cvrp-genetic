@@ -21,7 +21,8 @@ parameter_tabs <- tabsetPanel(
   ),
   tabPanel("Simulated annealing",
            numericInput("sa_iter", "Number of iteration", value = 1, min = 100, max = 2000),
-           radioButtons("temp_func", "Temperatutre function: ", choices = c("normal", "quadratic", "log")),
+           numericInput("sa_init_temp", "Initial temperature", value= 100, min =100, max =1000),
+           radioButtons("sa_temp_func", "Temperatutre function: ", choices = c("normal", "quadratic", "log")),
            sliderInput("sa_alpha", "Alpha", value = 0.1, min = 0.1, max = 1, step = 0.05)
   )
 )

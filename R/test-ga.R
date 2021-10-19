@@ -14,30 +14,26 @@ capacity =  df$capacity
 distance =df$distance
 df = df$file
 
-
-best =random_nn(capacity ,demand = df$demand,distance = distance)
-# for (i in 1:10000) {
-# a= random_nn(capacity ,demand = df$demand,distance = distance)
-# print(i)
-# if ( a$distance < best$distance) best = a
-# }
-
 # generate initial population
-suggest_pop = suggest_random_nn(100, capacity = capacity ,demand = df$demand,distance = distance)
+suggest_pop = suggest_random_nn(100, capacity = df$capacity ,demand = df$file$demand,distance = df$distance)
 
 # run GA
 library(GA)
 
 system.time({
 rs = ga(type = "permutation", fitness = fitness,
-        capacity =capacity,
-        df$demand,
-        distance  = distance, 
-        lower = 2, upper = max(df$node), 
-        mutation = gaperm_swMutation, popSize = 100, pmutation = 0.1, maxiter = 3000,
-        run= 3000,
+        capacity = df$capacity,
+        demand = df$file$demand,
+        distance  = df$distance, 
+        lower = 2, upper = nrow(df$file), 
+        mutation = gaperm_swMutation, popSize = 100, pmutation = 0.1, maxiter = 300,
         suggestions = suggest_pop)
 })
+
+x= list()
+x$path = rs@suggestions[1,] %>% gen_route(df$capacity, df$file$demand)
+x$fitness = -rs@fitnessValue
+x
 
 # islands GA (limit popsize = 10)
 

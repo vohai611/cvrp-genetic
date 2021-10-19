@@ -10,7 +10,7 @@ source("R/sa-random-nn-search.R")
 
 # read input
 
-df = read_vrp_bench("data-input/A/A-n33-k5.vrp")
+df = read_vrp_bench(here("benchmark-data/A/A-n33-k5.vrp"))
 
 meta_data = df$metadata
 capacity =  df$capacity
@@ -33,3 +33,4 @@ a %>% result_sa_tour()
 
 a %>% result_sa_tour() %>% 
   fitness(capacity, df$demand, distance)
+

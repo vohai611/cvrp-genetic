@@ -1,6 +1,5 @@
-library(tidyverse)
-
 # generate full route (including path to depot) by supply the order of point to visit
+# update to Cpp function
 gen_route = function(.order, capacity, demand) {
   names(.order) = .order
   
@@ -29,7 +28,7 @@ compute_distance = function(x, distance){
   - dist
 }
 
-Rcpp::sourceCpp("cpp/fitness-func.cpp")
+Rcpp::sourceCpp(here("src/fitness-func.cpp"))
 
 # fitness function (compute distance from the order of point visiting)
 fitness = function(x, capacity, demand, distance) {

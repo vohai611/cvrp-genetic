@@ -1,26 +1,32 @@
 library(shiny)
 library(here)
-benchmark_file = file = list.files(here("benchmark-data/A/"), pattern = "*.vrp")
+library(tidyverse)
+source(here("R/utils.R"))
+benchmark_file = list.files(here("benchmark-data/A/"), pattern = "*.vrp",full.names = TRUE)
+names(benchmark_file) = list.files(here("benchmark-data/A/"), pattern = "*.vrp")
+
+
+
 
 parameter_tabs <- tabsetPanel(
-  id = "params",
+  id = "algo_tab",
   type = "hidden",
   tabPanel("Nearest neighbor",
-           numericInput("mean", "mean", value = 1),
-           numericInput("sd", "standard deviation", min = 0, value = 1)
+           numericInput("nn_iter", "Numer of iteration", value = 1, min = 1, max =1000)
   ),
   tabPanel("Genetic", 
-           sliderInput("maxiter", "Choose number of generation:", min = 10, max = 2000,
+           numericInput("ga_maxiter", "Number of generation:", min = 10, max = 2000,
                        value = 100),
-           # set seed
-           numericInput("seed", "Set seed:", value = 1),
+           sliderInput("ga_pmutation", "Permutation ratio", min = 0, max = 0.4, value = 0.1)
   ),
   tabPanel("Simulated annealing",
-           numericInput("rate", "rate", value = 1, min = 0),
+           numericInput("sa_iter", "Number of iteration", value = 1, min = 100, max = 2000),
+           radioButtons("temp_func", "Temperatutre function: ", choices = c("normal", "quadratic", "log")),
+           sliderInput("sa_alpha", "Alpha", value = 0.1, min = 0.1, max = 1, step = 0.05)
   )
 )
 
-ui <- fluidPage(
+ui = fluidPage(
   
   titlePanel("C-VRP"),
   
@@ -29,20 +35,30 @@ ui <- fluidPage(
     sidebarPanel(
       # choose problem
       selectInput("benchmark_file",label = "Choose bench mark file:",choices = benchmark_file),
+      actionButton("preview", "Preview data"),
       # choose algorithm
-      radioButtons("algo", "Choose algorithm", choices = c("Nearest neighbor", "Genetic", "Simulated annealing")),
+      radioButtons("algo", "Choose algorithm", 
+                   choices = c("Nearest neighbor", "Genetic", "Simulated annealing")),
       h2("Choose parameter"),
-      li
       parameter_tabs,
+      actionButton("run", "Run")
     ),
-    mainPanel()
+    
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Preview data",tableOutput("preview_data")),
+        tabPanel("Result",
+                 div(style = 'overflow-y: scroll', verbatimTextOutput("result")),
+                 fluidRow(plotOutput("plot_result"))),
+        tabPanel("Addtional")
+        )
+     
+      
+    )
     )
   )
 
 # test UI
-server = function(input, output, session){
-  observeEvent(input$algo, {
-    updateTabsetPanel(session = session, "params", selected  = input$algo)
-  })
-}
-shinyApp(ui, server)
+#server_test = function(input, output, session){}
+# shinyApp(ui, server_test)
+

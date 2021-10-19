@@ -95,13 +95,20 @@ server <- function(input, output, session) {
   })
   
   output$result = renderText({
+    req(input$run)
+    
+    isolate({
     paste(paste(search_result()$path, collapse = " "),
           "\nResult distance: ", search_result()$distance)
+    })
   })
   
   
   output$plot_result = renderPlot({
+    req(input$run)
+    isolate({
     vrp_map(file_data(), search_result())
+    })
 
   })
   

@@ -35,7 +35,7 @@ ui = fluidPage(
     
     sidebarPanel(
       # choose problem
-      selectInput("benchmark_file",label = "Choose bench mark file:",choices = benchmark_file),
+      selectInput("benchmark_file",label = "Choose bench mark file:", choices = benchmark_file),
       actionButton("preview", "Preview data"),
       # choose algorithm
       radioButtons("algo", "Choose algorithm", 

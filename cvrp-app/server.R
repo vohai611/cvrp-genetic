@@ -13,7 +13,6 @@ server <- function(input, output, session) {
   
   # Process input
   file = eventReactive(input$preview, input$benchmark_file)
-  nn_iter = eventReactive(input$preview, input$nn_iter)
   
   file_data = reactive(read_vrp_bench(file()))
   
@@ -33,7 +32,7 @@ server <- function(input, output, session) {
       if(input$algo == "Nearest neighbor") {
         x = fbest_random_nn(capacity = file_data()$capacity,
                             file_data()$file$demand,
-                            file_data()$distance, rep = nn_iter())
+                            file_data()$distance, rep = input$nn_iter)
         
       } else if ( input$algo == "Genetic") {
         suggest_pop = suggest_random_nn(100, 

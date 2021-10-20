@@ -20,10 +20,10 @@ parameter_tabs <- tabsetPanel(
            sliderInput("ga_pmutation", "Permutation ratio", min = 0, max = 0.4, value = 0.1)
   ),
   tabPanel("Simulated annealing",
-           numericInput("sa_iter", "Number of iteration", value = 1, min = 100, max = 2000),
+           numericInput("sa_iter", "Number of iteration", value = 100, min = 100, max = 2000),
            numericInput("sa_init_temp", "Initial temperature", value= 100, min =100, max =1000),
-           radioButtons("sa_temp_func", "Temperatutre function: ", choices = c("normal", "quadratic", "log")),
-           sliderInput("sa_alpha", "Alpha", value = 0.1, min = 0.1, max = 1, step = 0.05)
+           radioButtons("sa_temp_func", "Temperatutre function: ", choices = c("normal", "square", "log")),
+           sliderInput("sa_alpha", "Alpha", value = 0.1, min = 0.1, max = 0.5, step = 0.05)
   )
 )
 
@@ -50,16 +50,18 @@ ui = fluidPage(
         tabPanel("Preview data",tableOutput("preview_data")),
         tabPanel("Result",
                  div(style = 'overflow-y: scroll', verbatimTextOutput("result")),
-                 fluidRow(plotOutput("plot_result"))),
-        tabPanel("Addtional")
+                 fluidRow(plotOutput("plot_result"))
+                ),
+        tabPanel("Addtional", textOutput('console'))
+        )
         )
      
       
     )
     )
-  )
+  
 
 # test UI
-#server_test = function(input, output, session){}
-# shinyApp(ui, server_test)
+# server_test = function(input, output, session){}
+#  shinyApp(ui, server_test)
 

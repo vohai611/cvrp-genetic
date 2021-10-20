@@ -64,32 +64,35 @@ server <- function(input, output, session) {
                                     file_data()$distance,
                                     rep = 100)
         
-        
-        a = candidate$path %>% divide_subtour() %>% sa_tour(distance = file_data()$file$distance,
+        a = candidate$path %>% divide_subtour() %>% sa_tour(distance = file_data()$distance,
                                                             niter = input$sa_iter,
                                                             init_temp = input$sa_init_temp,
                                                             .fun = input$sa_temp_func,
-                                                            alpha= input$sa_alpha)
+                                                            alpha= input$sa_alpha
+                                                            )
         
         x = list()
         x$path = a %>% result_sa_tour()
         x$distance = a %>% result_sa_tour() %>% 
           fitness(file_data()$capacity, file_data()$file$demand, file_data()$distance)
+        x$distance = - x$distance
       }
       x
       })
   })
+  
+  # render resultl: path + total distance
   
   output$result = renderText({
     req(input$run)
     
     isolate({
     paste(paste(search_result()$path, collapse = " "),
-          "\nResult distance: ", search_result()$distance)
+          "\nResult distance:", search_result()$distance)
     })
   })
   
-  
+  # draw visualize vrp
   output$plot_result = renderPlot({
     req(input$run)
     isolate({
@@ -98,7 +101,9 @@ server <- function(input, output, session) {
 
   })
   
+  
+ 
+  
 }
-shinyApp(ui, server)
 
 

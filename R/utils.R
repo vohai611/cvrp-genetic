@@ -60,12 +60,18 @@ read_user_input = function(input, capacity){
 
 # Visualize path ----------------------------------------------------------------------------------------
 map_preview = function(file){
-  file %>% 
-    mutate(depot = if_else(node == 1, T, F)) %>% 
-    ggplot(aes(x,y, color = depot))+
-    geom_point()+
-    theme_void()
   
+  a1 = file %>% 
+    mutate(depot = if_else(node == 1, T, F))
+  
+  a1 %>% 
+    ggplot(aes(x,y, color = depot))+
+    geom_point(size = 2) +
+    geom_label(data=  a1[1,], label = "DEPOT")+
+    scale_color_manual(values = c("red", "blue"))+
+    guides(color= "none")+
+    labs(title = "Plotting depot and demand data")+
+    theme_light()
 }
 
 vrp_map = function(file, result) {

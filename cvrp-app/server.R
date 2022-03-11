@@ -99,14 +99,17 @@ server <- function(input, output, session) {
       })
   })
   
-  # render resultl: path + total distance
+  # render result: path + total distance
   
   output$result = renderText({
     req(input$run)
     
     isolate({
-    paste(paste(search_result()$path, collapse = " "),
-          "\nResult distance:", search_result()$distance)
+     x = paste(search_result()$path, collapse = " ")
+     no_truck = str_count(x, " 1 ") + 1 
+    paste("Path:", x, 
+          "\nDistance:", search_result()$distance,
+          "\nNumber of trucks:", no_truck)
     })
   })
   

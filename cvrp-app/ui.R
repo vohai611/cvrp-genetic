@@ -6,8 +6,6 @@ benchmark_file = list.files(here("benchmark-data/A/"), pattern = "*.vrp",full.na
 names(benchmark_file) = list.files(here("benchmark-data/A/"), pattern = "*.vrp")
 
 
-
-
 parameter_tabs <- tabsetPanel(
   id = "algo_tab",
   type = "hidden",
@@ -42,9 +40,9 @@ ui = fluidPage(
   
   titlePanel("C-VRP"),
   
-  sidebarLayout(
+  sidebarLayout(fluid = T,
     
-    sidebarPanel(
+    sidebarPanel(width = 2,
       # choose problem ----------
       radioButtons("input_options", "Choose input data", 
                    choices = c("Benchmark data", "User data")),
@@ -58,10 +56,11 @@ ui = fluidPage(
       actionButton("run", "Run")
     ),
     
-    mainPanel(
+    mainPanel(width = 10,
       tabsetPanel(
         id = "main_panel",
         tabPanel("Preview data",
+                 br(),
                  column(3,
                    tableOutput("preview_data")
                  ),
@@ -70,8 +69,8 @@ ui = fluidPage(
                  )
                  ),
         tabPanel("Result",
-                 div(style = 'overflow-y: scroll', verbatimTextOutput("result")),
-                 fluidRow(plotOutput("plot_result"))
+                 div(style = 'overflow-y: scroll; width:100%', verbatimTextOutput("result")),
+                 fluidRow(column(width = 8, plotOutput("plot_result")))
                 ),
         tabPanel("Addtional", textOutput('console'))
         )

@@ -47,7 +47,14 @@ ui = fluidPage(
     
     mainPanel(
       tabsetPanel(
-        tabPanel("Preview data",tableOutput("preview_data")),
+        tabPanel("Preview data",
+                 column(3,
+                   tableOutput("preview_data")
+                 ),
+                 column(6,
+                 plotOutput("preview_data_plot"),
+                 )
+                 ),
         tabPanel("Result",
                  div(style = 'overflow-y: scroll', verbatimTextOutput("result")),
                  fluidRow(plotOutput("plot_result"))

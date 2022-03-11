@@ -17,11 +17,17 @@ server <- function(input, output, session) {
   file_data = reactive(read_vrp_bench(file()))
   
   
-  # run and get the result
+  # preview data
   
   output$preview_data = renderTable({
     req(input$preview)
     isolate(file_data()$file)
+  })
+  
+  # preview data plot 
+  output$preview_data_plot = renderPlot({
+    req(input$preview)
+    file_data()$file %>% map_preview()
   })
   
   # write output

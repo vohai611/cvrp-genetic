@@ -48,6 +48,14 @@ read_vrp_bench = function(path) {
 
 
 # Visualize path ----------------------------------------------------------------------------------------
+map_preview = function(file){
+  a1$file %>% 
+    mutate(depot = if_else(node == 1, T, F)) %>% 
+    ggplot(aes(x,y, color = depot))+
+    geom_point()+
+    theme_void()
+  
+}
 
 vrp_map = function(file, result) {
   fitness_val = result$distance

@@ -109,7 +109,7 @@ server <- function(input, output, session) {
      no_truck = str_count(x, " 1 ") + 1 
     paste("Path:", x, 
           "\nDistance:", search_result()$distance,
-          "\nNumber of trucks:", no_truck)
+          "\nNumber of trucks used:", no_truck)
     })
   })
   

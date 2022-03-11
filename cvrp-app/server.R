@@ -10,11 +10,24 @@ server <- function(input, output, session) {
   observeEvent(input$algo, {
     updateTabsetPanel(session = session, "algo_tab", selected  = input$algo)
   })
+  # hidden UI - input options
+  observeEvent(input$input_options,
+               { updateTabsetPanel(session = session,"input_tab", selected = input$input_options)
+               })
+  
+  observeEvent(input$preview, 
+                updateTabsetPanel(session = session, "main_panel", selected = "Preview data")
+                )
+  
+  observeEvent(input$run, 
+                updateTabsetPanel(session = session, "main_panel", selected = "Result"))
   
   # Process input
-  file = eventReactive(input$preview, input$benchmark_file)
+  file_data = eventReactive(input$preview, 
+                            if( input$input_options == "Benchmark data") read_vrp_bench(input$benchmark_file) else {
+                              read_user_input(input$upload, input$user_capacity)})
   
-  file_data = reactive(read_vrp_bench(file()))
+  #file_data = reactive(read_vrp_bench(file()))
   
   
   # preview data

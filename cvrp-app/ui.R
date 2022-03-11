@@ -27,6 +27,17 @@ parameter_tabs <- tabsetPanel(
   )
 )
 
+input_option_tab = tabsetPanel(
+  id = "input_tab",
+  type = "hidden",
+  tabPanel("Benchmark data",
+           selectInput("benchmark_file",label = "Choose bench mark file:", choices = benchmark_file),
+  ),
+  tabPanel("User data",
+           fileInput("upload", 'Upload', placeholder = "accept CSV"),
+           numericInput("user_capacity", "Truck capacity", min = 1, max = 2000,value = 100)))
+
+
 ui = fluidPage(
   
   titlePanel("C-VRP"),
@@ -34,10 +45,12 @@ ui = fluidPage(
   sidebarLayout(
     
     sidebarPanel(
-      # choose problem
-      selectInput("benchmark_file",label = "Choose bench mark file:", choices = benchmark_file),
+      # choose problem ----------
+      radioButtons("input_options", "Choose input data", 
+                   choices = c("Benchmark data", "User data")),
+      input_option_tab,
       actionButton("preview", "Preview data"),
-      # choose algorithm
+      # choose algorithm ---------
       radioButtons("algo", "Choose algorithm", 
                    choices = c("Nearest neighbor", "Genetic", "Simulated annealing")),
       h2("Choose parameter"),
@@ -47,6 +60,7 @@ ui = fluidPage(
     
     mainPanel(
       tabsetPanel(
+        id = "main_panel",
         tabPanel("Preview data",
                  column(3,
                    tableOutput("preview_data")

@@ -46,10 +46,21 @@ read_vrp_bench = function(path) {
   
 }
 
+# Read user input file ---------------------------------------------------------------------------------------
+read_user_input = function(input, capacity){
+   file = read_csv(input$datapath) %>% 
+     rename(x = x1, y = x2)
+  distance = dist(file[, c(2,3)], upper = T, diag = T ) %>% as.matrix()
+  list(file = file, capacity = capacity, distance = distance)
+}
+
+
+
+
 
 # Visualize path ----------------------------------------------------------------------------------------
 map_preview = function(file){
-  a1$file %>% 
+  file %>% 
     mutate(depot = if_else(node == 1, T, F)) %>% 
     ggplot(aes(x,y, color = depot))+
     geom_point()+

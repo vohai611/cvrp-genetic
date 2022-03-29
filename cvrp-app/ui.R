@@ -65,7 +65,7 @@ ui = fluidPage(
                    tableOutput("preview_data")
                  ),
                  column(6,
-                 plotOutput("preview_data_plot"),
+                 plotOutput("preview_data_plot", width= "120%"),
                  )
                  ),
         tabPanel("Result",

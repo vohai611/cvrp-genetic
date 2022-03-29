@@ -59,19 +59,26 @@ read_user_input = function(input, capacity){
 
 
 # Visualize path ----------------------------------------------------------------------------------------
+# color pallete
+my_col = paletteer::paletteer_d("ggsci::category20b_d3")
+
 map_preview = function(file){
   
   a1 = file %>% 
     mutate(depot = if_else(node == 1, T, F))
+    
   
   a1 %>% 
     ggplot(aes(x,y, color = depot))+
     geom_point(size = 2) +
-    geom_label(data=  a1[1,], label = "DEPOT")+
-    scale_color_manual(values = c("red", "blue"))+
+    geom_label(data=  a1[1, ], label = "DEPOT", color = my_col[9], fill = "transparent", nudge_x = 1, nudge_y = 1)+
+    geom_label(data= a1[-1, ], aes(label = demand),nudge_x = 1, nudge_y = .2, color = my_col[2], fill = "transparent")+
+    scale_color_manual(values = my_col[1:2])+
     guides(color= "none")+
-    labs(title = "Plotting depot and demand data")+
-    theme_light()
+    labs(title = "Depot and customer **positions**",
+         subtitle = "Number in labels is customer demand")+
+    theme_light()+
+    theme(plot.title = ggtext::element_markdown(family = "Monaco",size = 20))
 }
 
 vrp_map = function(file, result) {
@@ -82,7 +89,6 @@ vrp_map = function(file, result) {
     as_tibble(.name_repair = ~c("from", "to")) %>% 
     mutate(group = cumsum(to == 1))
   
-  my_col = paletteer::paletteer_d("ggsci::category20b_d3")
   
   
   file$file %>% left_join(rs_path, by = c("node" = "from")) %>% 

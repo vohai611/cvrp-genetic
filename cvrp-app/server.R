@@ -41,7 +41,7 @@ server <- function(input, output, session) {
   output$preview_data_plot = renderPlot({
     req(input$preview)
     file_data()$file %>% map_preview()
-  })
+  },height = 800)
   
   # write output
   search_result = reactive({

@@ -44,9 +44,14 @@ server <- function(input, output, session) {
   },height = 800)
   
   # write output
-  search_result = reactive({
+  search_result = eventReactive(input$run,{
     req(input$run)
     
+    # show waiter
+    waiter::Waiter$new(id = c("plot_result", "result"),
+                       color = waiter::transparent(.6),
+                       html = waiter::spin_3())$show()
+  
     isolate({
       if(input$algo == "Nearest neighbor") {
         x = fbest_random_nn(capacity = file_data()$capacity,
@@ -99,7 +104,8 @@ server <- function(input, output, session) {
       })
   })
   
-  # render result: path + total distance
+  # render result: path + total distance----
+
   
   output$result = renderText({
     req(input$run)

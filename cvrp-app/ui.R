@@ -37,6 +37,7 @@ input_option_tab = tabsetPanel(
 
 
 ui = fluidPage(
+  waiter::use_waiter(),
   
   titlePanel("C-VRP"),
   

@@ -76,7 +76,7 @@ map_preview = function(file){
     scale_color_manual(values = my_col[1:2])+
     guides(color= "none")+
     labs(title = "Depot and customer **positions**",
-         subtitle = "Number in labels is customer demand")+
+         subtitle = "Number in labels are customer demand")+
     theme_light()+
     theme(plot.title = ggtext::element_markdown(family = "Monaco",size = 20))
 }
@@ -91,22 +91,26 @@ vrp_map = function(file, result) {
   
   
   
-  file$file %>% left_join(rs_path, by = c("node" = "from")) %>% 
-    left_join(file$file, suffix = c("_from", "_to"), by= c('to' = 'node')) %>% 
-    ggplot(aes(x = x_from, y_from, color = as_factor(group) ))+
-    geom_point()+
+  df = file$file %>% left_join(rs_path, by = c("node" = "from")) %>% 
+    left_join(file$file, suffix = c("_from", "_to"), by= c('to' = 'node'))
+    
+    ggplot(df, aes(x = x_from, y_from, color = as_factor(group) ))+
+    geom_point(size = 3)+
+    geom_label(data=  df[1, ], label = "DEPOT", color = my_col[9], fill = "transparent", nudge_x = 1, nudge_y = 1)+
     geom_curve(aes(xend = x_to, yend =y_to), 
-               arrow = arrow(angle = 10, type = "closed"), 
                curvature = 0,
                alpha = .7, show.legend = F)+
-    geom_label(aes(label = node), position = position_nudge(x= 1, y = 1),
+    geom_label(data = df[-1, ], 
+               aes(label = node), position = position_nudge(x= 1, y = 1),fill = "grey96",
                show.legend = F)+
     labs(title = paste0("Result of data set: ", file$metadata[1]),
          subtitle = paste0("Total distance: ",fitness_val, "\n",
                            file$metadata[3]),
-         color= "Sub-tour") +
+         color= "Sub-tour",
+         x = "x",
+         y = "y") +
     scale_color_manual(values = my_col) +
-    theme_void()
+    theme_minimal()
 }
 
   

@@ -2,6 +2,7 @@ library(shiny)
 library(here)
 library(tidyverse)
 source(here("R/utils.R"))
+xfun::pkg_load("waiter")
 benchmark_file = list.files(here("benchmark-data/A/"), pattern = "*.vrp",full.names = TRUE)
 names(benchmark_file) = list.files(here("benchmark-data/A/"), pattern = "*.vrp")
 
@@ -39,20 +40,20 @@ input_option_tab = tabsetPanel(
 ui = fluidPage(
   waiter::use_waiter(),
   
-  titlePanel("C-VRP"),
+  titlePanel("C-VRP solver using heuristic algorithms"),
   
   sidebarLayout(fluid = T,
     
     sidebarPanel(width = 2,
       # choose problem ----------
-      radioButtons("input_options", "Choose input data", 
+      radioButtons("input_options", h3("Input data"), 
                    choices = c("Benchmark data", "User data")),
       input_option_tab,
       actionButton("preview", "Preview data"),
       # choose algorithm ---------
-      radioButtons("algo", "Choose algorithm", 
+      radioButtons("algo", h3("Choose algorithm"), 
                    choices = c("Nearest neighbor", "Genetic", "Simulated annealing")),
-      h2("Choose parameter"),
+      h3("Algorithm parameters"),
       parameter_tabs,
       actionButton("run", "Run")
     ),
@@ -70,10 +71,12 @@ ui = fluidPage(
                  )
                  ),
         tabPanel("Result",
-                 div(style = 'overflow-y: scroll; width:100%', verbatimTextOutput("result")),
-                 fluidRow(column(width = 8, plotOutput("plot_result")))
-                ),
-        tabPanel("Addtional", textOutput('console'))
+                 column(8, 
+                        div(style = 'overflow-y: scroll; width:100%', verbatimTextOutput("result")),
+                        plotOutput("plot_result",width = "120%")
+                        )
+                )
+        #tabPanel("Addtional", textOutput('console'))
         )
         )
      

@@ -126,7 +126,7 @@ server <- function(input, output, session) {
     vrp_map(file_data(), search_result())
     })
 
-  })
+  },height = 800)
   
   
  

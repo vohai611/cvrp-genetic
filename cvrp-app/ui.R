@@ -1,8 +1,8 @@
 library(shiny)
 library(here)
 library(tidyverse)
+library(waiter)
 source(here("R/utils.R"))
-xfun::pkg_load("waiter")
 benchmark_file = list.files(here("benchmark-data/A/"), pattern = "*.vrp",full.names = TRUE)
 names(benchmark_file) = list.files(here("benchmark-data/A/"), pattern = "*.vrp")
 
@@ -33,7 +33,7 @@ input_option_tab = tabsetPanel(
            selectInput("benchmark_file",label = "Choose bench mark file:", choices = benchmark_file),
   ),
   tabPanel("User data",
-           fileInput("upload", 'Upload', placeholder = "accept CSV"),
+           fileInput("upload", 'Upload', placeholder = "Accept CSV as Benchmark data form"),
            numericInput("user_capacity", "Truck capacity", min = 1, max = 2000,value = 100)))
 
 
@@ -44,7 +44,7 @@ ui = fluidPage(
   
   sidebarLayout(fluid = T,
     
-    sidebarPanel(width = 2,
+    sidebarPanel(width = 3,
       # choose problem ----------
       radioButtons("input_options", h3("Input data"), 
                    choices = c("Benchmark data", "User data")),
@@ -58,7 +58,7 @@ ui = fluidPage(
       uiOutput("run_ui"),
     ),
     
-    mainPanel(width = 10,
+    mainPanel(width = 9,
       tabsetPanel(
         id = "main_panel",
         tabPanel("Preview data",

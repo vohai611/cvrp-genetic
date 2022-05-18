@@ -1,0 +1,6 @@
+install.packages("here")
+install.packages("GA")
+install.packages("paletteer")
+install.packages("ggsci")
+install.packages("waiter")
+install.packages("ggtext")

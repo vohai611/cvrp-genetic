@@ -15,9 +15,21 @@ server <- function(input, output, session) {
                { updateTabsetPanel(session = session,"input_tab", selected = input$input_options)
                })
   
-  observeEvent(input$preview, 
+  observeEvent(input$preview,{ 
                 updateTabsetPanel(session = session, "main_panel", selected = "Preview data")
-                )
+               output$run_ui = renderUI(actionButton("run", "Run"))
+                })
+  
+  #hide run button if change benchmark file
+  observeEvent({
+    input$benchmark_file
+    input$input_options
+    },{
+      output$run_ui  = renderUI("")
+    })
+  
+  
+  
   
   observeEvent(input$run, 
                 updateTabsetPanel(session = session, "main_panel", selected = "Result"))

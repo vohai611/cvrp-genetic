@@ -55,7 +55,7 @@ ui = fluidPage(
                    choices = c("Nearest neighbor", "Genetic", "Simulated annealing")),
       h3("Algorithm parameters"),
       parameter_tabs,
-      actionButton("run", "Run")
+      uiOutput("run_ui"),
     ),
     
     mainPanel(width = 10,

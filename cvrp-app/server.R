@@ -82,18 +82,34 @@ server <- function(input, output, session) {
                                         distance = file_data()$distance)
         
         # run GA
-        rs = ga(type = "permutation", fitness = fitness,
-                capacity = file_data()$capacity,
-                demand = file_data()$file$demand,
-                distance  = file_data()$distance, 
-                lower = 2, upper = nrow(file_data()$file), 
-                mutation = gaperm_swMutation, popSize = 100,
-                pmutation = input$ga_pmutation,
-                maxiter = input$ga_maxiter,
-                suggestions = suggest_pop)
         
+        rs = withCallingHandlers({
+          shinyjs::html("progress_feedback", " ")
+          ga(type = "permutation", fitness = fitness,
+             capacity = file_data()$capacity,
+             demand = file_data()$file$demand,
+             distance  = file_data()$distance, 
+             lower = 2, upper = nrow(file_data()$file), 
+             mutation = gaperm_swMutation, popSize = 100,
+             pmutation = input$ga_pmutation,
+             maxiter = input$ga_maxiter,
+             suggestions = suggest_pop)
+          
+        },
+        message = function(m) {
+          
+          
+        current_progress({
+          x = 100 * str_extract(m$message, "\\d+") |> as.numeric() / input$ga_maxiter
+          if (is.na(x)) current_progress() else x
+          })
+          
+          
+        updateProgressBar(session, id = "progress_feedback", value = current_progress(), total = 100, unit_mark = "%")
+          
+        })
         
-        x= list()
+        x = list()
         x$path = rs@suggestions[1,] %>% gen_route(file_data()$capacity, file_data()$file$demand)
         x$distance = -rs@fitnessValue
         
@@ -119,6 +135,9 @@ server <- function(input, output, session) {
       x
       })
   })
+  
+  # Progress value -----
+  current_progress = reactiveVal(0)
   
   # render result: path + total distance----
 

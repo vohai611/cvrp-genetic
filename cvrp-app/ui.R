@@ -2,7 +2,10 @@ library(shiny)
 library(here)
 library(tidyverse)
 library(waiter)
+library(shinyjs)
+library(shinyWidgets)
 source(here("R/utils.R"))
+
 benchmark_file = list.files(here("benchmark-data/A/"), pattern = "*.vrp",full.names = TRUE)
 names(benchmark_file) = list.files(here("benchmark-data/A/"), pattern = "*.vrp")
 
@@ -38,6 +41,7 @@ input_option_tab = tabsetPanel(
 
 
 ui = fluidPage(
+  useShinyjs(),
   waiter::use_waiter(),
   
   titlePanel("C-VRP solver using heuristic algorithms"),
@@ -56,6 +60,9 @@ ui = fluidPage(
       h3("Algorithm parameters"),
       parameter_tabs,
       uiOutput("run_ui"),
+      progressBar(id = "progress_feedback",
+                  value = 0,total = 100,  display_pct = TRUE)
+    
     ),
     
     mainPanel(width = 9,

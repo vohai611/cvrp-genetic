@@ -1,6 +1,11 @@
 library(shiny)
 library(here)
 library(tidyverse)
+library(GA)
+
+# Rcpp not work on mac M1
+if (Sys.info()['machine'] != "x86_64")  gaControl("useRcpp" = FALSE)
+
 source(here("R/utils.R"))
 source(here("R/random_nn.R"))
 source(here("R/sa-random-nn-search.R"))
@@ -77,7 +82,6 @@ server <- function(input, output, session) {
                                         distance = file_data()$distance)
         
         # run GA
-        library(GA)
         rs = ga(type = "permutation", fitness = fitness,
                 capacity = file_data()$capacity,
                 demand = file_data()$file$demand,

@@ -24,7 +24,7 @@ candidate = fbest_random_nn(capacity, df$demand, distance, rep = 1000)
 
 
 a = candidate$path %>% divide_subtour() %>% sa_tour(distance = distance,
-                                                   niter = 100000,
+                                                   niter = 100,
                                                    init_temp = 1000)
 
 # pull path output

@@ -29,9 +29,9 @@ sa_search = function(fitness, distance,x,
   
   if(length(x) ==1) return(lst(niter, best_p, best_f))
   
-  message("Start simulated annealing search")
   
   for( i in 1:niter) {
+    message(i)
    
     temp = current_temp(i, init_temp, .fun, alpha)
     
@@ -53,7 +53,6 @@ sa_search = function(fitness, distance,x,
       best_f = neighbor_f
     }
   }
-  message("Done search!")
   return(lst(niter, best_p, best_f))
 }
 
@@ -66,6 +65,7 @@ fbest_random_nn = function(capacity, demand, distance, rep = 100) {
   best  = random_nn(capacity, demand,distance)
   
   for(i in 1:rep)  {
+    message(i)
     cur = random_nn(capacity,demand, distance)
     if( cur$distance < best$distance) best = cur
   }

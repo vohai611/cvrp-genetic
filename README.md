@@ -17,7 +17,7 @@ The shiny app is still underdevelopment
 ## Future work
 
 -   [x] Allow user to provide data
--   [ ] Add user feed back on running progress (NEED HELP)
+-   [x] Add user feed back on running progress (NEED HELP)
 -   [ ] Implement more algorithm: (Tabu search, sweep,…)
 
 ## Run app on your machine
@@ -40,4 +40,18 @@ docker run --rm -p 3838:3838 cvrp-app
 ```
 
 **NOTE:** This app require several package to be installed beforehand.
-They are listed in `require-packages.R`
+Those can be listed using
+
+``` r
+renv::dependencies()
+```
+
+To install all the package required, use:
+
+``` r
+renv::restore()
+```
+
+Note that, the `GA` package might not compile successfully if your RAM
+\< 1GB, you might try to create swap memory before install it via
+`renv::restore()`.

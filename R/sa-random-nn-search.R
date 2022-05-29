@@ -48,7 +48,7 @@ sa_search = function(fitness, distance,x,
     }
     # update best state
     if ( neighbor_f >  best_f) {
-      message(paste("find new best:", best_f))
+      #message(paste("find new best:", best_f))
       best_p = neighbor_p
       best_f = neighbor_f
     }

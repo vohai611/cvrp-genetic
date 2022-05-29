@@ -85,7 +85,9 @@ server <- function(input, output, session) {
         
         rs = withCallingHandlers({
           shinyjs::html("progress_feedback", " ")
-          ga(type = "permutation", fitness = fitness,
+          ga(type = "permutation",
+             monitor = TRUE,
+             fitness = fitness,
              capacity = file_data()$capacity,
              demand = file_data()$file$demand,
              distance  = file_data()$distance, 

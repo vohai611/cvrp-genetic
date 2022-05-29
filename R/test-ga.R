@@ -1,18 +1,15 @@
 library(tidyverse)
-library(tidygraph)
-library(ggraph)
-library(igraph)
-source("R/fitness-func.R")
-source("R/random_nn.R")
-source("R/utils.R")
+library(here)
+source(here("R/fitness-func.R"))
+source(here("R/random_nn.R"))
+source(here("R/utils.R"))
 ## test all my function 
 
-df = read_vrp_bench("data-input/A/A-n69-k9.vrp")
+df = read_vrp_bench(here("benchmark-data/A/A-n69-k9.vrp"))
 
 meta_data = df$metadata
 capacity =  df$capacity
 distance =df$distance
-df = df$file
 
 # generate initial population
 suggest_pop = suggest_random_nn(100, capacity = df$capacity ,demand = df$file$demand,distance = df$distance)

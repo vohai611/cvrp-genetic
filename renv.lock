@@ -24,11 +24,11 @@
       "Repository": "CRAN",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "GA",
       "RemoteUsername": "vohai611",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "109ba3795accb5ef449250e17b92b8e2f97335b6",
-      "Hash": "6d383e64a4e23d612ca570d4cf209882",
+      "RemoteRepo": "GA",
+      "RemoteRef": "master",
+      "RemoteSha": "f98a335a3bfed336c417a4ff092246d3b7341c3a",
+      "Hash": "18c1347c817142b83163e765e53583c4",
       "Requirements": [
         "Rcpp",
         "RcppArmadillo",
@@ -1344,6 +1344,33 @@
         "sourcetools",
         "withr",
         "xtable"
+      ]
+    },
+    "shinyWidgets": {
+      "Package": "shinyWidgets",
+      "Version": "0.7.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "4c00b64347509091f39c01c52f8d9e4c",
+      "Requirements": [
+        "bslib",
+        "htmltools",
+        "jsonlite",
+        "rlang",
+        "sass",
+        "shiny"
+      ]
+    },
+    "shinyjs": {
+      "Package": "shinyjs",
+      "Version": "2.1.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "802e4786b353a4bb27116957558548d5",
+      "Requirements": [
+        "digest",
+        "jsonlite",
+        "shiny"
       ]
     },
     "sourcetools": {

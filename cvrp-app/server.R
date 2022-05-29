@@ -142,6 +142,17 @@ server <- function(input, output, session) {
   
   ## Progress value -----
   current_progress = reactiveVal(0)
+ 
+  ### hide and reset to 0 progressBar after run 
+  observeEvent(req(current_progress() == 100),{
+    hide(id = "progress")
+    updateProgressBar(session, id = "progress_feedback", value = 0, total = 100, unit_mark = "%")
+    
+  })
+  ### show progress bar after click run
+  observeEvent(input$run, {
+    shinyjs::show(id = "progress")
+  })
   
   ## render result: path + total distance-----
   

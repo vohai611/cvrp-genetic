@@ -14,7 +14,7 @@ parameter_tabs <- tabsetPanel(
   id = "algo_tab",
   type = "hidden",
   tabPanel("Nearest neighbor",
-           numericInput("nn_iter", "Numer of iteration", value = 1, min = 1, max =1000)
+           numericInput("nn_iter", "Numer of iteration", value = 100, min = 1, max =1000)
   ),
   tabPanel("Genetic", 
            numericInput("ga_maxiter", "Number of generation:", min = 10, max = 2000,
@@ -60,8 +60,8 @@ ui = fluidPage(
       h3("Algorithm parameters"),
       parameter_tabs,
       uiOutput("run_ui"),
-      progressBar(id = "progress_feedback",
-                  value = 0,total = 100,  display_pct = TRUE)
+      div(id = "progress", progressBar(id = "progress_feedback",
+                  value = 0,total = 100,  display_pct = TRUE))
     
     ),
     
